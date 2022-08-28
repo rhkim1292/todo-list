@@ -12,7 +12,7 @@ const CreateTodo = (title, description = "No description") => {
     if (!_isValidTitle(title)) {
         throw "Please enter a valid string input for the todo title!";
     }
-    if (!_isValidDescription(title)) {
+    if (!_isValidDescription(description)) {
         throw "Please enter a valid string input for the todo description!";
     }
     var _title = title;
