@@ -1,7 +1,18 @@
-const CreateProject = (listOfTodos) => {
+const CreateProject = (title, listOfTodos) => {
     if (!Array.isArray(listOfTodos)) {
         throw "Project must be created with a passed-in array";
     }
+
+    const _isValidTitle = (title) => {
+        if (typeof title !== "string" || title.length <= 0) return false;
+        return true;
+    }
+
+    if (!_isValidTitle(title)) {
+        throw "Please enter a valid string input for the project title!";
+    }
+
+    var _title = title;
     var _listOfTodos = listOfTodos;
 
     const addTodo = (todo) => {
@@ -9,6 +20,9 @@ const CreateProject = (listOfTodos) => {
     };
 
     return {
+        get title() {
+            return _title;
+        },
         get length() {
             return _listOfTodos.length;
         },
