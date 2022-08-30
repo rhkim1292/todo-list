@@ -16,3 +16,48 @@ div#content {
     align-items: center;
 
 }
+
+.add-todo-form {
+	background-color: #f6f7f8;
+	border: 1px solid #d6d9dc;
+	border-radius: 3px;
+
+	padding: 50px 50px 30px 30px;
+	margin: 0 0 20px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	position: relative;
+}
+
+#closeFormBtn {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.form-row {
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.form-row label {
+	text-align: right;
+	width: 100px;
+	padding-right: 20px;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"] {
+	background-color: #ffffff;
+	border: 1px solid #d6d9dc;
+	border-radius: 3px;
+	padding: 7px;
+	font-size: 14px;
+}
+
+.form-row button {
+	margin-left: 100px;
+}

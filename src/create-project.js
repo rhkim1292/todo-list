@@ -1,40 +1,40 @@
 const CreateProject = (title, listOfTodos) => {
-    if (!Array.isArray(listOfTodos)) {
-        throw "Project must be created with a passed-in array";
-    }
+	if (!Array.isArray(listOfTodos)) {
+		throw "Project must be created with a passed-in array";
+	}
 
-    const _isValidTitle = (title) => {
-        if (typeof title !== "string" || title.length <= 0) return false;
-        return true;
-    }
+	const _isValidTitle = (title) => {
+		if (typeof title !== "string" || title.length <= 0) return false;
+		return true;
+	};
 
-    if (!_isValidTitle(title)) {
-        throw "Please enter a valid string input for the project title!";
-    }
+	if (!_isValidTitle(title)) {
+		throw "Please enter a valid string input for the project title";
+	}
 
-    var _title = title;
-    var _listOfTodos = listOfTodos;
+	var _title = title;
+	var _listOfTodos = listOfTodos;
 
-    const addTodo = (todo) => {
-        _listOfTodos.push(todo);
-    };
+	const addTodo = (todo) => {
+		_listOfTodos.push(todo);
+	};
 
-    return {
-        get title() {
-            return _title;
-        },
-        get length() {
-            return _listOfTodos.length;
-        },
-        set listOfTodos(todoList) {
-            if (!Array.isArray(todoList)) {
-                throw "Setting type must be an array!";
-            }
+	return {
+		get title() {
+			return _title;
+		},
+		get length() {
+			return _listOfTodos.length;
+		},
+		set listOfTodos(todoList) {
+			if (!Array.isArray(todoList)) {
+				throw "Setting type must be an array";
+			}
 
-            _listOfTodos = todoList;
-        },
-        addTodo,
-    };
+			_listOfTodos = todoList;
+		},
+		addTodo,
+	};
 };
 
 export default CreateProject;
