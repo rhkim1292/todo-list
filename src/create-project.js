@@ -26,6 +26,9 @@ const CreateProject = (title, listOfTodos) => {
 		get length() {
 			return _listOfTodos.length;
 		},
+		get listOfTodos() {
+			return _listOfTodos;
+		},
 		set listOfTodos(todoList) {
 			if (!Array.isArray(todoList)) {
 				throw "Setting type must be an array";
