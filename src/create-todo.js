@@ -18,10 +18,14 @@ const CreateTodo = (title, description = "No description") => {
     
     var _title = title;
     var _description = description;
-    const printTitle = () => console.log(`${_title}`);
 
     return {
-        printTitle,
+        get title() {
+            return _title;
+        },
+        get description() {
+            return _description;
+        }
     };
 };
 

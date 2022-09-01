@@ -5,23 +5,24 @@ import projectDOMHandler from "./render-todos.js";
 
 const mainAppLogic = (() => {
 	const _projects = [];
-	const firstProject = CreateProject("My First Todo List", []);
-	_projects.push(firstProject);
-	projectDOMHandler.renderProjectPage(firstProject);
+	const _firstProject = CreateProject("My First Todo List", []);
+	_projects.push(_firstProject);
+	projectDOMHandler.renderProjectPage(_firstProject);
     // Implement form submit button
     projectDOMHandler.form.addEventListener("submit", (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         addTodoToProject(formData);
-        // Update display/DOM
+        // TODO: Update display/DOM
+        projectDOMHandler.reloadTodoListDisplay();
         projectDOMHandler.disableForm();
     });
 })();
 
 function addTodoToProject(formData) {
-    const newTodo = CreateTodo(
+    const _newTodo = CreateTodo(
 		formData.get("title_name"),
 		formData.get("desc_text")
 	);
-	projectDOMHandler.currProject.addTodo(newTodo);
+	projectDOMHandler.currProject.addTodo(_newTodo);
 }

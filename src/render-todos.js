@@ -11,15 +11,29 @@ const projectDOMHandler = (() => {
 	var _btnAddTodo;
 	var _form;
 	var _currProject;
+
 	const enableForm = () => {
 		_btnAddTodo.style.display = "none";
 		_form.style.display = "block";
 	};
+
 	const disableForm = () => {
 		_form.reset();
 		_btnAddTodo.style.display = "block";
 		_form.style.display = "none";
 	};
+
+	const reloadTodoListDisplay = () => {
+		if (!_currProject) throw "A project has not been loaded on the page yet";
+		_divTodoList.innerHTML = "<ul></ul>"; // Clear the todo list element of its children
+
+		// Then re-populate the todo list with todo card elements
+		_currProject.listOfTodos.forEach((todo, index) => {
+			// The first child of the todo list div element is the unordered list
+			_divTodoList.firstChild.appendChild(createTodoCardDOMElement(todo, index));
+		});
+	};
+
 	const renderProjectPage = (project) => {
 		_currProject = project;
 		// Create h1 element that displays project title
@@ -65,6 +79,7 @@ const projectDOMHandler = (() => {
 		renderProjectPage,
 		enableForm,
 		disableForm,
+		reloadTodoListDisplay,
 		get form() {
 			return _form;
 		},
@@ -119,7 +134,7 @@ function createTodoFormCloseButton() {
 	return _formCloseBtn;
 }
 
-function createElementWithId(tag, id, textContent = "") {
+function createElementWithId(tag, id = "", textContent = "") {
 	if (
 		typeof tag !== "string" ||
 		typeof id !== "string" ||
@@ -132,6 +147,19 @@ function createElementWithId(tag, id, textContent = "") {
 	_return.textContent = textContent;
 
 	return _return;
+}
+
+function createTodoCardDOMElement(todo, index) {
+	const _liTodoCard = createElementWithId("li", `todo-${index}`);
+	const _inputCheckbox = createElementWithId("input", `check-${index}`);
+	_inputCheckbox.setAttribute("type", "checkbox");
+	const _pTodoTitle = createElementWithId("p", "", todo.title);
+	const _btnDeleteTodo = document.createElement("button");
+	_btnDeleteTodo.classList.add("todo-del-btn");
+	_btnDeleteTodo.setAttribute("onclick", "");
+	_btnDeleteTodo.textContent = "X";
+	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);
+	return _liTodoCard;
 }
 
 export default projectDOMHandler;
