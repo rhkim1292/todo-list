@@ -1,11 +1,11 @@
-const projectDOMHandler = (() => {
+const todoListDOMHandler = (() => {
 	const _divContent = document.querySelector("div#content");
 
 	if (!_divContent) {
 		_divContent = createElementWithId("div", "content");
 		document.body.appendChild(_divContent);
 	}
-
+	var _btnBackToProjects;
 	var _h1ProjectTitle;
 	var _divTodoList;
 	var _btnAddTodo;
@@ -34,8 +34,9 @@ const projectDOMHandler = (() => {
 		});
 	};
 
-	const renderProjectPage = (project) => {
+	const renderTodoListPage = (project) => {
 		_currProject = project;
+		_btnBackToProjects = createElementWithId("button", "back-to-projects-btn", "<- To Projects");
 		// Create h1 element that displays project title
 		_h1ProjectTitle = createElementWithId(
 			"h1",
@@ -72,11 +73,11 @@ const projectDOMHandler = (() => {
 			),
 			createTodoFormSubmitButton()
 		);
-		_divContent.append(_h1ProjectTitle, _divTodoList, _btnAddTodo, _form);
+		_divContent.append(_btnBackToProjects, _h1ProjectTitle, _divTodoList, _btnAddTodo, _form);
 	};
 
 	return {
-		renderProjectPage,
+		renderTodoListPage,
 		enableForm,
 		disableForm,
 		reloadTodoListDisplay,
@@ -129,12 +130,12 @@ function createTodoFormCloseButton() {
 	_formCloseBtn.id = "closeFormBtn";
 	_formCloseBtn.textContent = "nvm";
 	_formCloseBtn.addEventListener("click", (e) => {
-		projectDOMHandler.disableForm();
+		todoListDOMHandler.disableForm();
 	});
 	return _formCloseBtn;
 }
 
-function createElementWithId(tag, id = "", textContent = "") {
+export function createElementWithId(tag, id = "", textContent = "") {
 	if (
 		typeof tag !== "string" ||
 		typeof id !== "string" ||
@@ -157,12 +158,12 @@ function createTodoCardDOMElement(todo, index) {
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
 	_btnDeleteTodo.addEventListener("click", (e) => {
-		projectDOMHandler.currProject.removeTodo(index);
-		projectDOMHandler.reloadTodoListDisplay();
+		todoListDOMHandler.currProject.removeTodo(index);
+		todoListDOMHandler.reloadTodoListDisplay();
 	});
 	_btnDeleteTodo.textContent = "X";
 	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);
 	return _liTodoCard;
 }
 
-export default projectDOMHandler;
+export default todoListDOMHandler;

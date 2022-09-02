@@ -14,9 +14,18 @@ div#content {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+	position: relative;
 }
-div#todo-list ul {
+
+div#content button#back-to-projects-btn {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	padding: 10px 4px;
+}
+
+div#todo-list ul,
+div#project-list ul {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
@@ -24,16 +33,25 @@ div#todo-list ul {
 	flex-direction: column;
 }
 
-div#todo-list ul li {
+div#todo-list ul li,
+div#project-list ul li {
 	display: flex;
 	width: 400px;
 	border: 1px solid #d6d9dc;
 	gap: 5px;
 }
 
+div#project-list ul li {
+	justify-content: center;
+}
+
 div#todo-list ul li p {
 	margin: 0;
 	margin-right: auto;
+}
+
+div#project-list h3 {
+	margin: 0;
 }
 
 div#todo-list ul li button.todo-del-btn {
