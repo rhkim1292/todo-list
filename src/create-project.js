@@ -19,6 +19,10 @@ const CreateProject = (title, listOfTodos) => {
 		_listOfTodos.push(todo);
 	};
 
+	const removeTodo = (index) => {
+		_listOfTodos.splice(index, 1);
+	}
+
 	return {
 		get title() {
 			return _title;
@@ -37,6 +41,7 @@ const CreateProject = (title, listOfTodos) => {
 			_listOfTodos = todoList;
 		},
 		addTodo,
+		removeTodo,
 	};
 };
 

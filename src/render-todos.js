@@ -156,7 +156,10 @@ function createTodoCardDOMElement(todo, index) {
 	const _pTodoTitle = createElementWithId("p", "", todo.title);
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
-	_btnDeleteTodo.setAttribute("onclick", "");
+	_btnDeleteTodo.addEventListener("click", (e) => {
+		projectDOMHandler.currProject.removeTodo(index);
+		projectDOMHandler.reloadTodoListDisplay();
+	});
 	_btnDeleteTodo.textContent = "X";
 	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);
 	return _liTodoCard;

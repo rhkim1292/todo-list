@@ -13,7 +13,6 @@ const mainAppLogic = (() => {
         e.preventDefault();
         const formData = new FormData(e.target);
         addTodoToProject(formData);
-        // TODO: Update display/DOM
         projectDOMHandler.reloadTodoListDisplay();
         projectDOMHandler.disableForm();
     });
