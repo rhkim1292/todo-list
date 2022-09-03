@@ -20,9 +20,11 @@ const projectsDOMHandler = (() => {
 	const renderProjectsPage = (projects) => {
 		_projects = projects;
 		const divContent = document.querySelector("div#content");
+		divContent.innerHTML = "";
 		_h1PageTitle = createElementWithId("h1", "", "Your Projects");
 		_divProjectList = createElementWithId("div", "project-list");
 		divContent.append(_h1PageTitle, _divProjectList);
+		reloadProjectListDisplay();
 	};
 
 	return {

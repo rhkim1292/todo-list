@@ -9,22 +9,30 @@ const mainAppLogic = (() => {
 	const _firstProject = CreateProject("My First Todo List", []);
 	_projects.push(_firstProject);
 	todoListDOMHandler.renderTodoListPage(_firstProject);
-	const _btnBackToProjects = document.querySelector(
-		"button#back-to-projects-btn"
-	);
-	_btnBackToProjects.addEventListener("click", (e) => {
-		const divContent = document.querySelector("div#content");
-		divContent.innerHTML = "";
-		projectsDOMHandler.renderProjectsPage(_projects);
-		projectsDOMHandler.reloadProjectListDisplay();
-	});
-	// Implement form submit button
-	todoListDOMHandler.form.addEventListener("submit", (e) => {
+	const _divContent = document.querySelector("div#content");
+	const _preventDefaultSubmission = (e) => {
 		e.preventDefault();
-		const formData = new FormData(e.target);
-		addTodoToProject(formData);
-		todoListDOMHandler.reloadTodoListDisplay();
-		todoListDOMHandler.disableForm();
+	};
+	_divContent.addEventListener("click", (e) => {
+		console.log(e.target.parentElement.parentElement);
+		switch (e.target.id) {
+			case "add-todo-btn":
+				todoListDOMHandler.enableForm();
+				break;
+			case "closeFormBtn":
+				todoListDOMHandler.disableForm();
+				break;
+			case "back-to-projects-btn":
+				projectsDOMHandler.renderProjectsPage(_projects);
+				break;
+			case "form-submit-btn":
+				todoListDOMHandler.form.addEventListener("submit", _preventDefaultSubmission(e));
+				const formData = new FormData(todoListDOMHandler.form);
+				todoListDOMHandler.form.removeEventListener("submit", _preventDefaultSubmission(e));
+				addTodoToProject(formData);
+				todoListDOMHandler.reloadTodoListDisplay();
+				todoListDOMHandler.disableForm();
+		}
 	});
 })();
 

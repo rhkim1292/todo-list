@@ -52,9 +52,6 @@ const todoListDOMHandler = (() => {
 		_form.setAttribute("method", "get");
 		_form.setAttribute("class", "add-todo-form");
 		_form.setAttribute("style", "display: none");
-		_btnAddTodo.addEventListener("click", (e) => {
-			enableForm();
-		});
 		_form.append(
 			createTodoFormCloseButton(_form, _btnAddTodo),
 			createTodoFormProperty(
@@ -119,6 +116,7 @@ function createTodoFormSubmitButton() {
 	_divFormRow.setAttribute("class", "form-row");
 	const _formSubmitBtn = document.createElement("button");
 	_formSubmitBtn.setAttribute("type", "submit");
+	_formSubmitBtn.id = "form-submit-btn";
 	_formSubmitBtn.textContent = "Submit";
 	_divFormRow.appendChild(_formSubmitBtn);
 	return _divFormRow;
@@ -129,9 +127,6 @@ function createTodoFormCloseButton() {
 	_formCloseBtn.setAttribute("type", "button");
 	_formCloseBtn.id = "closeFormBtn";
 	_formCloseBtn.textContent = "nvm";
-	_formCloseBtn.addEventListener("click", (e) => {
-		todoListDOMHandler.disableForm();
-	});
 	return _formCloseBtn;
 }
 
