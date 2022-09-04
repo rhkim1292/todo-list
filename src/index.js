@@ -14,7 +14,7 @@ const mainAppLogic = (() => {
 		e.preventDefault();
 	};
 	_divContent.addEventListener("click", (e) => {
-		console.log(e.target.parentElement.parentElement);
+		console.log(e.target);
 		switch (e.target.id) {
 			case "add-todo-btn":
 				todoListDOMHandler.enableForm();
@@ -32,6 +32,16 @@ const mainAppLogic = (() => {
 				addTodoToProject(formData);
 				todoListDOMHandler.reloadTodoListDisplay();
 				todoListDOMHandler.disableForm();
+				break;
+			case "delete-todo-btn":
+				todoListDOMHandler.currProject.removeTodo(Number(e.target.dataset.index));
+				todoListDOMHandler.reloadTodoListDisplay();
+				break;
+			case "open-project":
+				todoListDOMHandler.renderTodoListPage(_projects[e.target.dataset.index]);
+				break;
+			default:
+				break;
 		}
 	});
 })();

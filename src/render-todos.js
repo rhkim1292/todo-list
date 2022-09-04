@@ -35,6 +35,7 @@ const todoListDOMHandler = (() => {
 	};
 
 	const renderTodoListPage = (project) => {
+		_divContent.innerHTML = "";
 		_currProject = project;
 		_btnBackToProjects = createElementWithId("button", "back-to-projects-btn", "<- To Projects");
 		// Create h1 element that displays project title
@@ -71,6 +72,7 @@ const todoListDOMHandler = (() => {
 			createTodoFormSubmitButton()
 		);
 		_divContent.append(_btnBackToProjects, _h1ProjectTitle, _divTodoList, _btnAddTodo, _form);
+		reloadTodoListDisplay();
 	};
 
 	return {
@@ -152,10 +154,8 @@ function createTodoCardDOMElement(todo, index) {
 	const _pTodoTitle = createElementWithId("p", "", todo.title);
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
-	_btnDeleteTodo.addEventListener("click", (e) => {
-		todoListDOMHandler.currProject.removeTodo(index);
-		todoListDOMHandler.reloadTodoListDisplay();
-	});
+	_btnDeleteTodo.id = "delete-todo-btn";
+	_btnDeleteTodo.setAttribute("data-index", index);
 	_btnDeleteTodo.textContent = "X";
 	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);
 	return _liTodoCard;

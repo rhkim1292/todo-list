@@ -34,8 +34,10 @@ const projectsDOMHandler = (() => {
 })();
 
 function createProjectCardDOMElement(project, index) {
-	const _liProjectCard = createElementWithId("li", `project-${index}`);
-	const _h3TodoTitle = createElementWithId("h3", "", project.title);
+	const _liProjectCard = createElementWithId("li", "open-project");
+	const _h3TodoTitle = createElementWithId("h3", "open-project", project.title);
+	_liProjectCard.setAttribute("data-index", index);
+	_h3TodoTitle.setAttribute("data-index", index);
 	_liProjectCard.append(_h3TodoTitle);
 	return _liProjectCard;
 }
