@@ -1,4 +1,4 @@
-const CreateProject = (title, listOfTodos) => {
+const CreateProject = (title, listOfTodos = []) => {
 	if (!Array.isArray(listOfTodos)) {
 		throw "Project must be created with a passed-in array";
 	}

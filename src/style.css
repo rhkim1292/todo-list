@@ -17,15 +17,15 @@ div#content {
 	position: relative;
 }
 
-div#content button#back-to-projects-btn {
+div#content button#backToProjectsBtn {
 	position: absolute;
 	top: 5px;
 	left: 5px;
 	padding: 10px 4px;
 }
 
-div#todo-list ul,
-div#project-list ul {
+div#todoList ul,
+div#projectList ul {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
@@ -33,33 +33,34 @@ div#project-list ul {
 	flex-direction: column;
 }
 
-div#todo-list ul li,
-div#project-list ul li {
+div#todoList ul li,
+div#projectList ul li {
 	display: flex;
 	width: 400px;
 	border: 1px solid #d6d9dc;
 	gap: 5px;
 }
 
-div#project-list ul li {
+div#projectList ul li {
 	justify-content: center;
+	cursor: pointer;
 }
 
-div#todo-list ul li p {
+div#todoList ul li p {
 	margin: 0;
 	margin-right: auto;
 }
 
-div#project-list h3 {
+div#projectList h3 {
 	margin: 0;
 }
 
-div#todo-list ul li button.todo-del-btn {
+div#todoList ul li button.todo-del-btn {
 	color: red;
 	font-weight: bold;
 }
 
-.add-todo-form {
+form {
 	background-color: #f6f7f8;
 	border: 1px solid #d6d9dc;
 	border-radius: 3px;
@@ -72,7 +73,7 @@ div#todo-list ul li button.todo-del-btn {
 	position: relative;
 }
 
-#closeFormBtn {
+.close-form-btn {
 	position: absolute;
 	top: 5px;
 	right: 5px;

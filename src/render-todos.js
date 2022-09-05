@@ -12,32 +12,28 @@ const todoListDOMHandler = (() => {
 	var _form;
 	var _currProject;
 
-	const enableForm = () => {
-		_btnAddTodo.style.display = "none";
-		_form.style.display = "block";
-	};
-
-	const disableForm = () => {
-		_form.reset();
-		_btnAddTodo.style.display = "block";
-		_form.style.display = "none";
-	};
-
 	const reloadTodoListDisplay = () => {
-		if (!_currProject) throw "A project has not been loaded on the page yet";
+		if (!_currProject)
+			throw "A project has not been loaded on the page yet";
 		_divTodoList.innerHTML = "<ul></ul>"; // Clear the todo list element of its children
 
 		// Then re-populate the todo list with todo card elements
 		_currProject.listOfTodos.forEach((todo, index) => {
 			// The first child of the todo list div element is the unordered list
-			_divTodoList.firstChild.appendChild(createTodoCardDOMElement(todo, index));
+			_divTodoList.firstChild.appendChild(
+				createTodoCardDOMElement(todo, index)
+			);
 		});
 	};
 
 	const renderTodoListPage = (project) => {
 		_divContent.innerHTML = "";
 		_currProject = project;
-		_btnBackToProjects = createElementWithId("button", "back-to-projects-btn", "<- To Projects");
+		_btnBackToProjects = createElementWithId(
+			"button",
+			"backToProjectsBtn",
+			"<- To Projects"
+		);
 		// Create h1 element that displays project title
 		_h1ProjectTitle = createElementWithId(
 			"h1",
@@ -45,43 +41,49 @@ const todoListDOMHandler = (() => {
 			`Project: ${project.title}`
 		);
 		// Create div element that holds todo list
-		_divTodoList = createElementWithId("div", "todo-list");
+		_divTodoList = createElementWithId("div", "todoList");
 		// Append button that reveals a form to create todo item
-		_btnAddTodo = createElementWithId("button", "add-todo-btn", "Add Todo");
+		_btnAddTodo = createElementWithId("button", "addTodoBtn", "Add Todo");
 		_form = document.createElement("form");
 		_form.setAttribute("action", "");
 		_form.setAttribute("method", "get");
-		_form.setAttribute("class", "add-todo-form");
 		_form.setAttribute("style", "display: none");
 		_form.append(
-			createTodoFormCloseButton(_form, _btnAddTodo),
-			createTodoFormProperty(
+			createFormCloseButton("closeTodoFormBtn"),
+			createFormProperty(
 				"Title",
 				"text",
 				"titleName",
 				"title_name",
 				"Todo Title"
 			),
-			createTodoFormProperty(
+			createFormProperty(
 				"Description",
 				"text",
 				"description",
 				"desc_text",
 				"Todo Description"
 			),
-			createTodoFormSubmitButton()
+			createFormSubmitButton("todoFormSubmitBtn")
 		);
-		_divContent.append(_btnBackToProjects, _h1ProjectTitle, _divTodoList, _btnAddTodo, _form);
+		_divContent.append(
+			_btnBackToProjects,
+			_h1ProjectTitle,
+			_divTodoList,
+			_btnAddTodo,
+			_form
+		);
 		reloadTodoListDisplay();
 	};
 
 	return {
 		renderTodoListPage,
-		enableForm,
-		disableForm,
 		reloadTodoListDisplay,
 		get form() {
 			return _form;
+		},
+		get btnAddTodo() {
+			return _btnAddTodo;
 		},
 		get currProject() {
 			return _currProject;
@@ -89,7 +91,18 @@ const todoListDOMHandler = (() => {
 	};
 })();
 
-function createTodoFormProperty(title, type, id, name, placeholder = "") {
+export function enableForm(form, addBtn) {
+	addBtn.style.display = "none";
+	form.style.display = "block";
+}
+
+export function disableForm(form, addBtn) {
+	form.reset();
+	addBtn.style.display = "block";
+	form.style.display = "none";
+}
+
+export function createFormProperty(title, type, id, name, placeholder = "") {
 	if (
 		typeof title !== "string" ||
 		typeof type !== "string" ||
@@ -97,7 +110,7 @@ function createTodoFormProperty(title, type, id, name, placeholder = "") {
 		typeof name !== "string" ||
 		typeof placeholder !== "string"
 	) {
-		throw "createTodoFormProperty must be called with strings";
+		throw "createFormProperty must be called with strings";
 	}
 	const _divFormRow = document.createElement("div");
 	_divFormRow.setAttribute("class", "form-row");
@@ -113,21 +126,29 @@ function createTodoFormProperty(title, type, id, name, placeholder = "") {
 	return _divFormRow;
 }
 
-function createTodoFormSubmitButton() {
+export function createFormSubmitButton(id) {
+	if (typeof id !== "string") {
+		throw "createFormSubmitButton must be called with strings";
+	}
 	const _divFormRow = document.createElement("div");
 	_divFormRow.setAttribute("class", "form-row");
 	const _formSubmitBtn = document.createElement("button");
 	_formSubmitBtn.setAttribute("type", "submit");
-	_formSubmitBtn.id = "form-submit-btn";
+	_formSubmitBtn.id = id;
 	_formSubmitBtn.textContent = "Submit";
 	_divFormRow.appendChild(_formSubmitBtn);
 	return _divFormRow;
 }
 
-function createTodoFormCloseButton() {
+export function createFormCloseButton(id) {
+	if (typeof id !== "string") {
+		throw "createFormCloseButton must be called with strings";
+	}
+
 	const _formCloseBtn = document.createElement("button");
 	_formCloseBtn.setAttribute("type", "button");
-	_formCloseBtn.id = "closeFormBtn";
+	_formCloseBtn.id = id;
+	_formCloseBtn.classList.add("close-form-btn");
 	_formCloseBtn.textContent = "nvm";
 	return _formCloseBtn;
 }
@@ -154,7 +175,7 @@ function createTodoCardDOMElement(todo, index) {
 	const _pTodoTitle = createElementWithId("p", "", todo.title);
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
-	_btnDeleteTodo.id = "delete-todo-btn";
+	_btnDeleteTodo.id = "deleteTodoBtn";
 	_btnDeleteTodo.setAttribute("data-index", index);
 	_btnDeleteTodo.textContent = "X";
 	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);

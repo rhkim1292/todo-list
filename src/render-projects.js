@@ -1,8 +1,15 @@
-import { createElementWithId } from "./render-todos.js";
+import {
+	createElementWithId,
+	createFormCloseButton,
+	createFormProperty,
+	createFormSubmitButton,
+} from "./render-todos.js";
 
 const projectsDOMHandler = (() => {
 	var _h1PageTitle;
 	var _divProjectList;
+	var _btnAddProject;
+	var _form;
 	var _projects;
 
 	const reloadProjectListDisplay = () => {
@@ -22,20 +29,50 @@ const projectsDOMHandler = (() => {
 		const divContent = document.querySelector("div#content");
 		divContent.innerHTML = "";
 		_h1PageTitle = createElementWithId("h1", "", "Your Projects");
-		_divProjectList = createElementWithId("div", "project-list");
-		divContent.append(_h1PageTitle, _divProjectList);
+		_divProjectList = createElementWithId("div", "projectList");
+		_btnAddProject = createElementWithId(
+			"button",
+			"addProjectBtn",
+			"Add Project"
+		);
+		_form = document.createElement("form");
+		_form.setAttribute("action", "");
+		_form.setAttribute("method", "get");
+		_form.setAttribute("style", "display: none");
+		_form.append(
+			createFormCloseButton("closeProjectFormBtn"),
+			createFormProperty(
+				"Title",
+				"text",
+				"titleName",
+				"title_name",
+				"Project Title"
+			),
+			createFormSubmitButton("projectFormSubmitBtn")
+		);
+		divContent.append(_h1PageTitle, _divProjectList, _btnAddProject, _form);
 		reloadProjectListDisplay();
 	};
 
 	return {
 		renderProjectsPage,
-        reloadProjectListDisplay,
+		reloadProjectListDisplay,
+		get form() {
+			return _form;
+		},
+		get btnAddProject() {
+			return _btnAddProject;
+		},
 	};
 })();
 
 function createProjectCardDOMElement(project, index) {
-	const _liProjectCard = createElementWithId("li", "open-project");
-	const _h3TodoTitle = createElementWithId("h3", "open-project", project.title);
+	const _liProjectCard = createElementWithId("li", "openProject");
+	const _h3TodoTitle = createElementWithId(
+		"h3",
+		"openProject",
+		project.title
+	);
 	_liProjectCard.setAttribute("data-index", index);
 	_h3TodoTitle.setAttribute("data-index", index);
 	_liProjectCard.append(_h3TodoTitle);

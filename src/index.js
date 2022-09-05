@@ -1,7 +1,7 @@
 import "./style.css";
 import CreateTodo from "./create-todo.js";
 import CreateProject from "./create-project.js";
-import todoListDOMHandler from "./render-todos.js";
+import todoListDOMHandler, {enableForm, disableForm} from "./render-todos.js";
 import projectsDOMHandler from "./render-projects.js";
 
 const mainAppLogic = (() => {
@@ -14,30 +14,45 @@ const mainAppLogic = (() => {
 		e.preventDefault();
 	};
 	_divContent.addEventListener("click", (e) => {
-		console.log(e.target);
+		var formData;
 		switch (e.target.id) {
-			case "add-todo-btn":
-				todoListDOMHandler.enableForm();
+			case "addTodoBtn":
+				enableForm(todoListDOMHandler.form, todoListDOMHandler.btnAddTodo);
 				break;
-			case "closeFormBtn":
-				todoListDOMHandler.disableForm();
+			case "closeTodoFormBtn":
+				disableForm(todoListDOMHandler.form, todoListDOMHandler.btnAddTodo);
 				break;
-			case "back-to-projects-btn":
+			case "addProjectBtn":
+				enableForm(projectsDOMHandler.form, projectsDOMHandler.btnAddProject);
+				break;
+			case "closeProjectFormBtn":
+				disableForm(projectsDOMHandler.form, projectsDOMHandler.btnAddProject);
+				break;
+			case "backToProjectsBtn":
 				projectsDOMHandler.renderProjectsPage(_projects);
 				break;
-			case "form-submit-btn":
+			case "todoFormSubmitBtn":
 				todoListDOMHandler.form.addEventListener("submit", _preventDefaultSubmission(e));
-				const formData = new FormData(todoListDOMHandler.form);
+				formData = new FormData(todoListDOMHandler.form);
 				todoListDOMHandler.form.removeEventListener("submit", _preventDefaultSubmission(e));
 				addTodoToProject(formData);
 				todoListDOMHandler.reloadTodoListDisplay();
-				todoListDOMHandler.disableForm();
+				disableForm(todoListDOMHandler.form, todoListDOMHandler.btnAddTodo);
 				break;
-			case "delete-todo-btn":
+			case "projectFormSubmitBtn":
+				projectsDOMHandler.form.addEventListener("submit", _preventDefaultSubmission(e));
+				formData = new FormData(projectsDOMHandler.form);
+				projectsDOMHandler.form.removeEventListener("submit", _preventDefaultSubmission(e));
+				const _newProject = CreateProject(formData.get("title_name"));
+				_projects.push(_newProject);
+				projectsDOMHandler.reloadProjectListDisplay();
+				disableForm(projectsDOMHandler.form, projectsDOMHandler.btnAddProject);
+				break;
+			case "deleteTodoBtn":
 				todoListDOMHandler.currProject.removeTodo(Number(e.target.dataset.index));
 				todoListDOMHandler.reloadTodoListDisplay();
 				break;
-			case "open-project":
+			case "openProject":
 				todoListDOMHandler.renderTodoListPage(_projects[e.target.dataset.index]);
 				break;
 			default:
