@@ -1,3 +1,5 @@
+import EditIcon from "./edit-icon.svg";
+
 const todoListDOMHandler = (() => {
 	const _divContent = document.querySelector("div#content");
 
@@ -7,9 +9,11 @@ const todoListDOMHandler = (() => {
 	}
 	var _btnBackToProjects;
 	var _h1ProjectTitle;
+	var _editProjectTitleForm;
+	var _imgEditTitleBtn;
 	var _divTodoList;
 	var _btnAddTodo;
-	var _form;
+	var _addTodoForm;
 	var _currProject;
 
 	const reloadTodoListDisplay = () => {
@@ -26,6 +30,17 @@ const todoListDOMHandler = (() => {
 		});
 	};
 
+	const enableProjectTitleForm = () => {
+		_editProjectTitleForm.style.display = "flex";
+		_h1ProjectTitle.style.display = "none";
+	};
+
+	const disableProjectTitleForm = () => {
+		_editProjectTitleForm.reset();
+		_editProjectTitleForm.style.display = "none";
+		_h1ProjectTitle.style.display = "block";
+	};
+
 	const renderTodoListPage = (project) => {
 		_divContent.innerHTML = "";
 		_currProject = project;
@@ -40,15 +55,36 @@ const todoListDOMHandler = (() => {
 			"",
 			`Project: ${project.title}`
 		);
+		_editProjectTitleForm = document.createElement("form");
+		_editProjectTitleForm.setAttribute("action", "");
+		_editProjectTitleForm.setAttribute("method", "get");
+		_editProjectTitleForm.setAttribute("style", "display: none");
+		_editProjectTitleForm.id = "editProjectTitleForm";
+		const _inputTitle = document.createElement("input");
+		_inputTitle.setAttribute("type", "text");
+		_inputTitle.setAttribute("name", "project_title");
+		_inputTitle.setAttribute("placeholder", "New Project Title");
+		_inputTitle.setAttribute("value", _currProject.title);
+		const _btnApply = createElementWithId("button", "applyBtn");
+		_btnApply.setAttribute("type", "submit");
+		_editProjectTitleForm.append(
+			createFormCloseButton("closeEditProjectTitleFormBtn"),
+			_inputTitle,
+			_btnApply
+		);
+		_imgEditTitleBtn = createElementWithId("img", "editTitleBtn");
+		_imgEditTitleBtn.setAttribute("src", EditIcon);
+		_h1ProjectTitle.appendChild(_imgEditTitleBtn);
 		// Create div element that holds todo list
 		_divTodoList = createElementWithId("div", "todoList");
 		// Append button that reveals a form to create todo item
 		_btnAddTodo = createElementWithId("button", "addTodoBtn", "Add Todo");
-		_form = document.createElement("form");
-		_form.setAttribute("action", "");
-		_form.setAttribute("method", "get");
-		_form.setAttribute("style", "display: none");
-		_form.append(
+		_addTodoForm = document.createElement("form");
+		_addTodoForm.setAttribute("action", "");
+		_addTodoForm.setAttribute("method", "get");
+		_addTodoForm.setAttribute("style", "display: none");
+		_addTodoForm.id = "addTodoForm";
+		_addTodoForm.append(
 			createFormCloseButton("closeTodoFormBtn"),
 			createFormProperty(
 				"Title",
@@ -69,9 +105,10 @@ const todoListDOMHandler = (() => {
 		_divContent.append(
 			_btnBackToProjects,
 			_h1ProjectTitle,
+			_editProjectTitleForm,
 			_divTodoList,
 			_btnAddTodo,
-			_form
+			_addTodoForm
 		);
 		reloadTodoListDisplay();
 	};
@@ -79,8 +116,13 @@ const todoListDOMHandler = (() => {
 	return {
 		renderTodoListPage,
 		reloadTodoListDisplay,
-		get form() {
-			return _form;
+		enableProjectTitleForm,
+		disableProjectTitleForm,
+		get editProjectTitleForm() {
+			return _editProjectTitleForm;
+		},
+		get addTodoForm() {
+			return _addTodoForm;
 		},
 		get btnAddTodo() {
 			return _btnAddTodo;
@@ -148,7 +190,6 @@ export function createFormCloseButton(id) {
 	const _formCloseBtn = document.createElement("button");
 	_formCloseBtn.setAttribute("type", "button");
 	_formCloseBtn.id = id;
-	_formCloseBtn.classList.add("close-form-btn");
 	_formCloseBtn.textContent = "nvm";
 	return _formCloseBtn;
 }

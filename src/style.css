@@ -24,6 +24,48 @@ div#content button#backToProjectsBtn {
 	padding: 10px 4px;
 }
 
+div#content h1 {
+	position: relative;
+}
+
+div#content h1 img#editTitleBtn {
+	position: absolute;
+	top: 5px;
+	right: -35px;
+	width: 25px;
+	cursor: pointer;
+	filter: invert(57%) sepia(0%) saturate(285%) hue-rotate(174deg) brightness(89%) contrast(95%);
+}
+
+div#content form#editProjectTitleForm {
+	position: relative;
+}
+
+div#content form#editProjectTitleForm button#closeEditProjectTitleFormBtn {
+	position: absolute;
+	top: 32px;
+	left: -45px;
+}
+
+div#content form#editProjectTitleForm input {
+	margin: 21.44px 0px;
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+}
+
+div#content form#editProjectTitleForm button#applyBtn {
+	position: absolute;
+	top: 25px;
+	right: -35px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	border: none;
+	background: url("./apply-icon.svg");
+	/* filter: invert(22%) sepia(92%) saturate(4908%) hue-rotate(144deg) brightness(91%) contrast(90%); */
+}
+
 div#todoList ul,
 div#projectList ul {
 	padding: 0;
@@ -60,7 +102,8 @@ div#todoList ul li button.todo-del-btn {
 	font-weight: bold;
 }
 
-form {
+form#addTodoForm,
+form#addProjectForm {
 	background-color: #f6f7f8;
 	border: 1px solid #d6d9dc;
 	border-radius: 3px;
@@ -73,7 +116,8 @@ form {
 	position: relative;
 }
 
-.close-form-btn {
+form#addTodoForm button#closeTodoFormBtn,
+form#addProjectForm button#closeProjectFormBtn {
 	position: absolute;
 	top: 5px;
 	right: 5px;

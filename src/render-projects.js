@@ -39,6 +39,7 @@ const projectsDOMHandler = (() => {
 		_form.setAttribute("action", "");
 		_form.setAttribute("method", "get");
 		_form.setAttribute("style", "display: none");
+		_form.id = "addProjectForm";
 		_form.append(
 			createFormCloseButton("closeProjectFormBtn"),
 			createFormProperty(

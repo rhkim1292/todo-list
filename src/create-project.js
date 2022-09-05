@@ -40,6 +40,9 @@ const CreateProject = (title, listOfTodos = []) => {
 
 			_listOfTodos = todoList;
 		},
+		set title(newTitle) {
+			_title = newTitle;
+		},
 		addTodo,
 		removeTodo,
 	};
