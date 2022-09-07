@@ -119,7 +119,8 @@ const mainAppLogic = (() => {
 function addTodoToProject(formData) {
 	const _newTodo = CreateTodo(
 		formData.get("title_name"),
-		formData.get("desc_text")
+		formData.get("desc_text"),
+		new Date(formData.get("due_date"))
 	);
 	todoListDOMHandler.currProject.addTodo(_newTodo);
 }

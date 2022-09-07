@@ -1,4 +1,5 @@
 import EditIcon from "./edit-icon.svg";
+import { format } from "date-fns";
 
 const todoListDOMHandler = (() => {
 	const _divContent = document.querySelector("div#content");
@@ -84,6 +85,14 @@ const todoListDOMHandler = (() => {
 		_addTodoForm.setAttribute("method", "get");
 		_addTodoForm.setAttribute("style", "display: none");
 		_addTodoForm.id = "addTodoForm";
+		const _dueDateFormProperty = createFormProperty(
+			"Due Date",
+			"date",
+			"dueDate",
+			"due_date"
+		);
+		var _todaysDate = format(new Date(), "yyyy-MM-dd");
+		_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
 		_addTodoForm.append(
 			createFormCloseButton("closeTodoFormBtn"),
 			createFormProperty(
@@ -100,6 +109,7 @@ const todoListDOMHandler = (() => {
 				"desc_text",
 				"Todo Description"
 			),
+			_dueDateFormProperty,
 			createFormSubmitButton("todoFormSubmitBtn")
 		);
 		_divContent.append(

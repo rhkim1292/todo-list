@@ -30,7 +30,7 @@ div#content h1 {
 
 div#content h1 img#editTitleBtn {
 	position: absolute;
-	top: 5px;
+	top: 10%;
 	right: -35px;
 	width: 25px;
 	cursor: pointer;
@@ -43,7 +43,7 @@ div#content form#editProjectTitleForm {
 
 div#content form#editProjectTitleForm button#closeEditProjectTitleFormBtn {
 	position: absolute;
-	top: 32px;
+	top: 37%;
 	left: -45px;
 }
 
@@ -56,7 +56,7 @@ div#content form#editProjectTitleForm input {
 
 div#content form#editProjectTitleForm button#applyBtn {
 	position: absolute;
-	top: 25px;
+	top: 30%;
 	right: -35px;
 	width: 30px;
 	height: 30px;
