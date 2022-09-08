@@ -120,7 +120,7 @@ function addTodoToProject(formData) {
 	const _newTodo = CreateTodo(
 		formData.get("title_name"),
 		formData.get("desc_text"),
-		new Date(formData.get("due_date"))
+		new Date(formData.get("due_date").replace(/\-/g, '/'))
 	);
 	todoListDOMHandler.currProject.addTodo(_newTodo);
 }

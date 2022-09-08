@@ -87,10 +87,16 @@ div#projectList ul li {
 	justify-content: center;
 	cursor: pointer;
 }
-
 div#todoList ul li p {
 	margin: 0;
+}
+
+div#todoList ul li p.todo-title {
 	margin-right: auto;
+}
+
+div#todoList ul li p.todo-due-date {
+	flex-shrink: 0;
 }
 
 div#projectList h3 {

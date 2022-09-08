@@ -85,6 +85,14 @@ const todoListDOMHandler = (() => {
 		_addTodoForm.setAttribute("method", "get");
 		_addTodoForm.setAttribute("style", "display: none");
 		_addTodoForm.id = "addTodoForm";
+		const _titleFormProperty = createFormProperty(
+			"Title",
+			"text",
+			"titleName",
+			"title_name",
+			"Todo Title"
+		);
+		_titleFormProperty.children[1].setAttribute("maxlength", "21");
 		const _dueDateFormProperty = createFormProperty(
 			"Due Date",
 			"date",
@@ -95,13 +103,7 @@ const todoListDOMHandler = (() => {
 		_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
 		_addTodoForm.append(
 			createFormCloseButton("closeTodoFormBtn"),
-			createFormProperty(
-				"Title",
-				"text",
-				"titleName",
-				"title_name",
-				"Todo Title"
-			),
+			_titleFormProperty,
 			createFormProperty(
 				"Description",
 				"text",
@@ -224,12 +226,16 @@ function createTodoCardDOMElement(todo, index) {
 	const _inputCheckbox = createElementWithId("input", `check-${index}`);
 	_inputCheckbox.setAttribute("type", "checkbox");
 	const _pTodoTitle = createElementWithId("p", "", todo.title);
+	_pTodoTitle.classList.add("todo-title");
+	const _pDueDate = document.createElement("p");
+	_pDueDate.classList.add("todo-due-date");
+	_pDueDate.textContent = `Due: ${format(todo.dueDate, "M/d/yy")}`;
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
 	_btnDeleteTodo.id = "deleteTodoBtn";
 	_btnDeleteTodo.setAttribute("data-index", index);
 	_btnDeleteTodo.textContent = "X";
-	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _btnDeleteTodo);
+	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _pDueDate, _btnDeleteTodo);
 	return _liTodoCard;
 }
 
