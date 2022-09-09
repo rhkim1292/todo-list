@@ -3,6 +3,7 @@ import CreateTodo from "./create-todo.js";
 import CreateProject from "./create-project.js";
 import todoListDOMHandler, { enableForm, disableForm } from "./render-todos.js";
 import projectsDOMHandler from "./render-projects.js";
+import { isBefore, startOfToday } from "date-fns";
 
 const mainAppLogic = (() => {
 	const _projects = [];
@@ -12,6 +13,20 @@ const mainAppLogic = (() => {
 	const _divContent = document.querySelector("div#content");
 	const _preventDefaultSubmission = (e) => {
 		e.preventDefault();
+	};
+	const _addTodoSubmission = (e) => {
+		e.preventDefault();
+		const _dueDateInput =
+			todoListDOMHandler.addTodoForm.children[3].children[1];
+		const _inputDate = _dueDateInput.valueAsDate;
+		if (isBefore(_inputDate, startOfToday())) {
+			_dueDateInput.setCustomValidity(
+				"Please enter a valid date that's today or in the future!"
+			);
+			_dueDateInput.reportValidity();
+		} else {
+			_dueDateInput.setCustomValidity("");
+		}
 	};
 	_divContent.addEventListener("click", (e) => {
 		var formData;
@@ -31,8 +46,11 @@ const mainAppLogic = (() => {
 					"submit",
 					_preventDefaultSubmission(e)
 				);
-				todoListDOMHandler.currProject.title = formData.get("project_title");
-				todoListDOMHandler.renderTodoListPage(todoListDOMHandler.currProject);
+				todoListDOMHandler.currProject.title =
+					formData.get("project_title");
+				todoListDOMHandler.renderTodoListPage(
+					todoListDOMHandler.currProject
+				);
 				break;
 			case "closeEditProjectTitleFormBtn":
 				todoListDOMHandler.disableProjectTitleForm();
@@ -67,13 +85,20 @@ const mainAppLogic = (() => {
 			case "todoFormSubmitBtn":
 				todoListDOMHandler.addTodoForm.addEventListener(
 					"submit",
-					_preventDefaultSubmission(e)
+					_addTodoSubmission(e)
 				);
 				formData = new FormData(todoListDOMHandler.addTodoForm);
 				todoListDOMHandler.addTodoForm.removeEventListener(
 					"submit",
-					_preventDefaultSubmission(e)
+					_addTodoSubmission(e)
 				);
+				if (
+					isBefore(
+						new Date(formData.get("due_date").replace(/\-/g, "/")),
+						startOfToday()
+					)
+				)
+					break;
 				addTodoToProject(formData);
 				todoListDOMHandler.reloadTodoListDisplay();
 				disableForm(
@@ -120,7 +145,7 @@ function addTodoToProject(formData) {
 	const _newTodo = CreateTodo(
 		formData.get("title_name"),
 		formData.get("desc_text"),
-		new Date(formData.get("due_date").replace(/\-/g, '/'))
+		new Date(formData.get("due_date").replace(/\-/g, "/"))
 	);
 	todoListDOMHandler.currProject.addTodo(_newTodo);
 }

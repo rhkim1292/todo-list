@@ -1,4 +1,5 @@
-import {isDate, isFuture} from "date-fns";
+import {isDate, isBefore, startOfToday} from "date-fns";
+
 const CreateTodo = (title, description = "No description", dueDate) => {
     const _isValidTitle = (title) => {
         if (typeof title !== "string" || title.length <= 0) return false;
@@ -11,7 +12,7 @@ const CreateTodo = (title, description = "No description", dueDate) => {
     }
 
     const _isValidDueDate = (dueDate) => {
-        if (!isDate(dueDate) || !isFuture(dueDate)) return false;
+        if (!isDate(dueDate) || isBefore(dueDate, startOfToday())) return false;
         return true;
     }
 
