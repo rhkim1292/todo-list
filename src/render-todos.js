@@ -57,8 +57,7 @@ const todoListDOMHandler = (() => {
 			`Project: ${project.title}`
 		);
 		_editProjectTitleForm = document.createElement("form");
-		_editProjectTitleForm.setAttribute("action", "");
-		_editProjectTitleForm.setAttribute("method", "get");
+		_editProjectTitleForm.setAttribute("action", "#");
 		_editProjectTitleForm.setAttribute("style", "display: none");
 		_editProjectTitleForm.id = "editProjectTitleForm";
 		const _inputTitle = document.createElement("input");
@@ -66,6 +65,7 @@ const todoListDOMHandler = (() => {
 		_inputTitle.setAttribute("name", "project_title");
 		_inputTitle.setAttribute("placeholder", "New Project Title");
 		_inputTitle.setAttribute("value", _currProject.title);
+		_inputTitle.setAttribute("required", "");
 		const _btnApply = createElementWithId("button", "applyBtn");
 		_btnApply.setAttribute("type", "submit");
 		_editProjectTitleForm.append(
@@ -81,8 +81,7 @@ const todoListDOMHandler = (() => {
 		// Append button that reveals a form to create todo item
 		_btnAddTodo = createElementWithId("button", "addTodoBtn", "Add Todo");
 		_addTodoForm = document.createElement("form");
-		_addTodoForm.setAttribute("action", "");
-		_addTodoForm.setAttribute("method", "get");
+		_addTodoForm.setAttribute("action", "#");
 		_addTodoForm.setAttribute("style", "display: none");
 		_addTodoForm.id = "addTodoForm";
 		const _titleFormProperty = createFormProperty(
@@ -93,14 +92,16 @@ const todoListDOMHandler = (() => {
 			"Todo Title"
 		);
 		_titleFormProperty.children[1].setAttribute("maxlength", "21");
+		_titleFormProperty.children[1].setAttribute("required", "");
 		const _dueDateFormProperty = createFormProperty(
 			"Due Date",
 			"date",
 			"dueDate",
 			"due_date"
 		);
-		var _todaysDate = format(new Date(), "yyyy-MM-dd");
+		const _todaysDate = format(new Date(), "yyyy-MM-dd");
 		_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
+		_dueDateFormProperty.children[1].setAttribute("value", _todaysDate);
 		_addTodoForm.append(
 			createFormCloseButton("closeTodoFormBtn"),
 			_titleFormProperty,

@@ -36,19 +36,20 @@ const projectsDOMHandler = (() => {
 			"Add Project"
 		);
 		_form = document.createElement("form");
-		_form.setAttribute("action", "");
-		_form.setAttribute("method", "get");
+		_form.setAttribute("action", "#");
 		_form.setAttribute("style", "display: none");
 		_form.id = "addProjectForm";
+		const _projectTitleFormProperty = createFormProperty(
+			"Title",
+			"text",
+			"titleName",
+			"title_name",
+			"Project Title"
+		);
+		_projectTitleFormProperty.children[1].setAttribute("required", "");
 		_form.append(
 			createFormCloseButton("closeProjectFormBtn"),
-			createFormProperty(
-				"Title",
-				"text",
-				"titleName",
-				"title_name",
-				"Project Title"
-			),
+			_projectTitleFormProperty,
 			createFormSubmitButton("projectFormSubmitBtn")
 		);
 		divContent.append(_h1PageTitle, _divProjectList, _btnAddProject, _form);

@@ -3,7 +3,7 @@ import CreateTodo from "./create-todo.js";
 import CreateProject from "./create-project.js";
 import todoListDOMHandler, { enableForm, disableForm } from "./render-todos.js";
 import projectsDOMHandler from "./render-projects.js";
-import { isBefore, startOfToday } from "date-fns";
+import { isDate } from "date-fns";
 
 const mainAppLogic = (() => {
 	const _projects = [];
@@ -11,23 +11,11 @@ const mainAppLogic = (() => {
 	_projects.push(_firstProject);
 	todoListDOMHandler.renderTodoListPage(_firstProject);
 	const _divContent = document.querySelector("div#content");
+
 	const _preventDefaultSubmission = (e) => {
 		e.preventDefault();
 	};
-	const _addTodoSubmission = (e) => {
-		e.preventDefault();
-		const _dueDateInput =
-			todoListDOMHandler.addTodoForm.children[3].children[1];
-		const _inputDate = _dueDateInput.valueAsDate;
-		if (isBefore(_inputDate, startOfToday())) {
-			_dueDateInput.setCustomValidity(
-				"Please enter a valid date that's today or in the future!"
-			);
-			_dueDateInput.reportValidity();
-		} else {
-			_dueDateInput.setCustomValidity("");
-		}
-	};
+
 	_divContent.addEventListener("click", (e) => {
 		var formData;
 		switch (e.target.id) {
@@ -35,16 +23,17 @@ const mainAppLogic = (() => {
 				todoListDOMHandler.enableProjectTitleForm();
 				break;
 			case "applyBtn":
+				if (!todoListDOMHandler.editProjectTitleForm.checkValidity()) break;
 				todoListDOMHandler.editProjectTitleForm.addEventListener(
+					"submit",
+					_preventDefaultSubmission(e)
+				);
+				todoListDOMHandler.editProjectTitleForm.removeEventListener(
 					"submit",
 					_preventDefaultSubmission(e)
 				);
 				formData = new FormData(
 					todoListDOMHandler.editProjectTitleForm
-				);
-				todoListDOMHandler.editProjectTitleForm.removeEventListener(
-					"submit",
-					_preventDefaultSubmission(e)
 				);
 				todoListDOMHandler.currProject.title =
 					formData.get("project_title");
@@ -83,22 +72,26 @@ const mainAppLogic = (() => {
 				projectsDOMHandler.renderProjectsPage(_projects);
 				break;
 			case "todoFormSubmitBtn":
+				if (!todoListDOMHandler.addTodoForm.checkValidity()) {
+					const _dueDateInput =
+						todoListDOMHandler.addTodoForm.children[3].children[1];
+					const _inputDate = _dueDateInput.valueAsDate;
+					if (!isDate(_inputDate)) {
+						_dueDateInput.setCustomValidity("Please enter a valid date.");
+					} else {
+						_dueDateInput.setCustomValidity("");
+					}
+					break;
+				}
 				todoListDOMHandler.addTodoForm.addEventListener(
 					"submit",
-					_addTodoSubmission(e)
+					_preventDefaultSubmission(e)
 				);
-				formData = new FormData(todoListDOMHandler.addTodoForm);
 				todoListDOMHandler.addTodoForm.removeEventListener(
 					"submit",
-					_addTodoSubmission(e)
+					_preventDefaultSubmission(e)
 				);
-				if (
-					isBefore(
-						new Date(formData.get("due_date").replace(/\-/g, "/")),
-						startOfToday()
-					)
-				)
-					break;
+				formData = new FormData(todoListDOMHandler.addTodoForm);
 				addTodoToProject(formData);
 				todoListDOMHandler.reloadTodoListDisplay();
 				disableForm(
@@ -107,15 +100,16 @@ const mainAppLogic = (() => {
 				);
 				break;
 			case "projectFormSubmitBtn":
+				if (!projectsDOMHandler.form.checkValidity()) break;
 				projectsDOMHandler.form.addEventListener(
 					"submit",
 					_preventDefaultSubmission(e)
 				);
-				formData = new FormData(projectsDOMHandler.form);
 				projectsDOMHandler.form.removeEventListener(
 					"submit",
 					_preventDefaultSubmission(e)
 				);
+				formData = new FormData(projectsDOMHandler.form);
 				const _newProject = CreateProject(formData.get("title_name"));
 				_projects.push(_newProject);
 				projectsDOMHandler.reloadProjectListDisplay();
