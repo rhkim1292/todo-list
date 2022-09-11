@@ -41,6 +41,7 @@ const projectsDOMHandler = (() => {
 		_form.id = "addProjectForm";
 		const _projectTitleFormProperty = createFormProperty(
 			"Title",
+			"input",
 			"text",
 			"titleName",
 			"title_name",

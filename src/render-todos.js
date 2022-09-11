@@ -86,6 +86,7 @@ const todoListDOMHandler = (() => {
 		_addTodoForm.id = "addTodoForm";
 		const _titleFormProperty = createFormProperty(
 			"Title",
+			"input",
 			"text",
 			"titleName",
 			"title_name",
@@ -95,6 +96,7 @@ const todoListDOMHandler = (() => {
 		_titleFormProperty.children[1].setAttribute("required", "");
 		const _dueDateFormProperty = createFormProperty(
 			"Due Date",
+			"input",
 			"date",
 			"dueDate",
 			"due_date"
@@ -102,17 +104,45 @@ const todoListDOMHandler = (() => {
 		const _todaysDate = format(new Date(), "yyyy-MM-dd");
 		_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
 		_dueDateFormProperty.children[1].setAttribute("value", _todaysDate);
+		const _priorityFormProperty = createFormProperty(
+			"Priority",
+			"select",
+			"",
+			"priority",
+			"priority"
+		);
+		const _optHighest = document.createElement("option");
+		_optHighest.setAttribute("value", "Highest");
+		_optHighest.textContent = "Highest";
+		const _optHigh = document.createElement("option");
+		_optHigh.setAttribute("value", "High");
+		_optHigh.textContent = "High";
+		const _optMedium = document.createElement("option");
+		_optMedium.setAttribute("value", "Medium");
+		_optMedium.setAttribute("selected", "");
+		_optMedium.textContent = "Medium";
+		const _optLow = document.createElement("option");
+		_optLow.setAttribute("value", "Low");
+		_optLow.textContent = "Low";
+		_priorityFormProperty.children[1].append(
+			_optHighest,
+			_optHigh,
+			_optMedium,
+			_optLow
+		);
 		_addTodoForm.append(
 			createFormCloseButton("closeTodoFormBtn"),
 			_titleFormProperty,
 			createFormProperty(
 				"Description",
+				"input",
 				"text",
 				"description",
 				"desc_text",
 				"Todo Description"
 			),
 			_dueDateFormProperty,
+			_priorityFormProperty,
 			createFormSubmitButton("todoFormSubmitBtn")
 		);
 		_divContent.append(
@@ -157,9 +187,10 @@ export function disableForm(form, addBtn) {
 	form.style.display = "none";
 }
 
-export function createFormProperty(title, type, id, name, placeholder = "") {
+export function createFormProperty(title, element, type, id, name, placeholder = "") {
 	if (
 		typeof title !== "string" ||
+		typeof element !== "string" ||
 		typeof type !== "string" ||
 		typeof id !== "string" ||
 		typeof name !== "string" ||
@@ -170,9 +201,9 @@ export function createFormProperty(title, type, id, name, placeholder = "") {
 	const _divFormRow = document.createElement("div");
 	_divFormRow.setAttribute("class", "form-row");
 	const _label = document.createElement("label");
-	_label.setAttribute("for", `${id}`);
+	_label.setAttribute("for", id);
 	_label.textContent = title;
-	const _input = document.createElement("input");
+	const _input = document.createElement(element);
 	_input.setAttribute("type", type);
 	_input.setAttribute("id", id);
 	_input.setAttribute("name", name);

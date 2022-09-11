@@ -1,6 +1,6 @@
 import {isDate, isBefore, startOfToday} from "date-fns";
 
-const CreateTodo = (title, description = "No description", dueDate) => {
+const CreateTodo = (title, description = "No description", dueDate, priority) => {
     const _isValidTitle = (title) => {
         if (typeof title !== "string" || title.length <= 0) return false;
         return true;
@@ -16,6 +16,11 @@ const CreateTodo = (title, description = "No description", dueDate) => {
         return true;
     }
 
+    const _isValidPriority = (priority) => {
+        if (priority !== "Highest" && priority !== "High" && priority !== "Medium" && priority !== "Low") return false;
+        return true;
+    }
+
     if (!_isValidTitle(title)) {
         throw "Please enter a valid string input for the todo title!";
     }
@@ -27,9 +32,14 @@ const CreateTodo = (title, description = "No description", dueDate) => {
         throw "Please enter a valid date in the future!";
     }
     
+    if (!_isValidPriority(priority)) {
+        throw "Please enter a valid priority!";
+    }
+
     var _title = title;
     var _description = description;
     var _dueDate = dueDate;
+    var _priority = priority;
 
     return {
         get title() {
@@ -40,6 +50,9 @@ const CreateTodo = (title, description = "No description", dueDate) => {
         },
         get dueDate() {
             return _dueDate;
+        },
+        get priority() {
+            return _priority;
         },
     };
 };
