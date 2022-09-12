@@ -1,7 +1,12 @@
 import "./style.css";
 import CreateTodo from "./create-todo.js";
 import CreateProject from "./create-project.js";
-import todoListDOMHandler, { enableForm, disableForm } from "./render-todos.js";
+import todoListDOMHandler, {
+	enableForm,
+	disableForm,
+	expandDetails,
+	closeDetails,
+} from "./render-todos.js";
 import projectsDOMHandler from "./render-projects.js";
 import { isDate } from "date-fns";
 
@@ -23,7 +28,8 @@ const mainAppLogic = (() => {
 				todoListDOMHandler.enableProjectTitleForm();
 				break;
 			case "applyBtn":
-				if (!todoListDOMHandler.editProjectTitleForm.checkValidity()) break;
+				if (!todoListDOMHandler.editProjectTitleForm.checkValidity())
+					break;
 				todoListDOMHandler.editProjectTitleForm.addEventListener(
 					"submit",
 					_preventDefaultSubmission(e)
@@ -77,7 +83,9 @@ const mainAppLogic = (() => {
 						todoListDOMHandler.addTodoForm.children[3].children[1];
 					const _inputDate = _dueDateInput.valueAsDate;
 					if (!isDate(_inputDate)) {
-						_dueDateInput.setCustomValidity("Please enter a valid date.");
+						_dueDateInput.setCustomValidity(
+							"Please enter a valid date."
+						);
 					} else {
 						_dueDateInput.setCustomValidity("");
 					}
@@ -117,6 +125,12 @@ const mainAppLogic = (() => {
 					projectsDOMHandler.form,
 					projectsDOMHandler.btnAddProject
 				);
+				break;
+			case "expandDetailsBtn":
+				expandDetails(e.target);
+				break;
+			case "closeDetailsBtn":
+				closeDetails(e.target);
 				break;
 			case "deleteTodoBtn":
 				todoListDOMHandler.currProject.removeTodo(

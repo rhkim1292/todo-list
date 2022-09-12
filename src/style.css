@@ -75,27 +75,34 @@ div#projectList ul {
 	flex-direction: column;
 }
 
-div#todoList ul li,
+div#todoList ul li div.todo-header,
 div#projectList ul li {
 	display: flex;
-	width: 400px;
-	border: 1px solid #d6d9dc;
 	gap: 5px;
+}
+
+div#todoList ul li,
+div#projectList ul li {
+	border: 1px solid #d6d9dc;
+	width: 400px;
 }
 
 div#projectList ul li {
 	justify-content: center;
 	cursor: pointer;
 }
+
+div#todoList ul li h4,
 div#todoList ul li p {
 	margin: 0;
+	overflow-wrap: break-word;
 }
 
-div#todoList ul li p.todo-title {
+div#todoList ul li h4.todo-title {
 	margin-right: auto;
 }
 
-div#todoList ul li p.todo-due-date {
+div#todoList ul li h4.todo-due-date {
 	flex-shrink: 0;
 }
 
@@ -103,9 +110,23 @@ div#projectList h3 {
 	margin: 0;
 }
 
+div#todoList ul li img.expand-details-btn {
+	height: 22px;
+	cursor: pointer;
+	filter: invert(57%) sepia(0%) saturate(285%) hue-rotate(174deg) brightness(89%) contrast(95%);
+}
+
 div#todoList ul li button.todo-del-btn {
 	color: red;
 	font-weight: bold;
+}
+
+div#todoList ul li div.todo-details {
+	padding: 5px 25px 20px 25px;
+}
+
+div#todoList ul li h4.todo-priority {
+	text-align: center;
 }
 
 form#addTodoForm,

@@ -1,4 +1,6 @@
 import EditIcon from "./edit-icon.svg";
+import ExpandIcon from "./expand-details.svg";
+import CloseIcon from "./close-details.svg";
 import { format } from "date-fns";
 
 const todoListDOMHandler = (() => {
@@ -187,7 +189,28 @@ export function disableForm(form, addBtn) {
 	form.style.display = "none";
 }
 
-export function createFormProperty(title, element, type, id, name, placeholder = "") {
+export function expandDetails(target) {
+	target.setAttribute("src", CloseIcon);
+	target.id = "closeDetailsBtn";
+	const _divTodoDetails = target.parentElement.nextSibling;
+	_divTodoDetails.style.display = "block";
+}
+
+export function closeDetails(target) {
+	target.setAttribute("src", ExpandIcon);
+	target.id = "expandDetailsBtn";
+	const _divTodoDetails = target.parentElement.nextSibling;
+	_divTodoDetails.style.display = "none";
+}
+
+export function createFormProperty(
+	title,
+	element,
+	type,
+	id,
+	name,
+	placeholder = ""
+) {
 	if (
 		typeof title !== "string" ||
 		typeof element !== "string" ||
@@ -255,19 +278,50 @@ export function createElementWithId(tag, id = "", textContent = "") {
 
 function createTodoCardDOMElement(todo, index) {
 	const _liTodoCard = createElementWithId("li", `todo-${index}`);
+	const _divTodoHeader = document.createElement("div");
+	_divTodoHeader.classList.add("todo-header");
 	const _inputCheckbox = createElementWithId("input", `check-${index}`);
 	_inputCheckbox.setAttribute("type", "checkbox");
-	const _pTodoTitle = createElementWithId("p", "", todo.title);
+	const _pTodoTitle = createElementWithId("h4", "", todo.title);
 	_pTodoTitle.classList.add("todo-title");
-	const _pDueDate = document.createElement("p");
+	const _pDueDate = document.createElement("h4");
 	_pDueDate.classList.add("todo-due-date");
 	_pDueDate.textContent = `Due: ${format(todo.dueDate, "M/d/yy")}`;
+	const _imgExpandDetailsBtn = createElementWithId("img", "expandDetailsBtn");
+	_imgExpandDetailsBtn.setAttribute("src", ExpandIcon);
+	_imgExpandDetailsBtn.classList.add("expand-details-btn");
+	_imgExpandDetailsBtn.setAttribute("data-index", index);
+
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
 	_btnDeleteTodo.id = "deleteTodoBtn";
 	_btnDeleteTodo.setAttribute("data-index", index);
 	_btnDeleteTodo.textContent = "X";
-	_liTodoCard.append(_inputCheckbox, _pTodoTitle, _pDueDate, _btnDeleteTodo);
+	_divTodoHeader.append(
+		_inputCheckbox,
+		_pTodoTitle,
+		_pDueDate,
+		_imgExpandDetailsBtn,
+		_btnDeleteTodo
+	);
+	const _divTodoDetails = createElementWithId("div", `todo-details-${index}`);
+	_divTodoDetails.classList.add("todo-details");
+	_divTodoDetails.style.display = "none";
+	const _pTodoDescriptionLabel = document.createElement("h4");
+	_pTodoDescriptionLabel.textContent = "Description:";
+	const _pTodoDescription = document.createElement("p");
+	_pTodoDescription.textContent = todo.description;
+	const _pTodoPriority = document.createElement("h4");
+	_pTodoPriority.textContent = "Priority: " + todo.priority;
+	_pTodoPriority.classList.add("todo-priority");
+	const _br = document.createElement("br");
+	_divTodoDetails.append(
+		_pTodoPriority,
+		_pTodoDescriptionLabel,
+		_br,
+		_pTodoDescription
+	);
+	_liTodoCard.append(_divTodoHeader, _divTodoDetails);
 	return _liTodoCard;
 }
 
