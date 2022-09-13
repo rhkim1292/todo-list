@@ -81,6 +81,22 @@ div#projectList ul li {
 	gap: 5px;
 }
 
+div#todoList ul li.low-priority {
+	background-color: #cef6cb;
+}
+
+div#todoList ul li.medium-priority {
+	background-color: #faf1ba;
+}
+
+div#todoList ul li.high-priority {
+	background-color: #fccda8;
+}
+
+div#todoList ul li.highest-priority {
+	background-color: #ff9fbc;
+}
+
 div#todoList ul li,
 div#projectList ul li {
 	border: 1px solid #d6d9dc;

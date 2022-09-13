@@ -1,6 +1,6 @@
 import {isDate, isBefore, startOfToday} from "date-fns";
 
-const CreateTodo = (title, description = "No description", dueDate, priority) => {
+const CreateTodo = (title, description, dueDate, priority) => {
     const _isValidTitle = (title) => {
         if (typeof title !== "string" || title.length <= 0) return false;
         return true;
@@ -37,7 +37,7 @@ const CreateTodo = (title, description = "No description", dueDate, priority) =>
     }
 
     var _title = title;
-    var _description = description;
+    var _description = description === "" ? "No description" : description;
     var _dueDate = dueDate;
     var _priority = priority;
 

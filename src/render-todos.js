@@ -278,6 +278,20 @@ export function createElementWithId(tag, id = "", textContent = "") {
 
 function createTodoCardDOMElement(todo, index) {
 	const _liTodoCard = createElementWithId("li", `todo-${index}`);
+	switch (todo.priority) {
+		case "Low":
+			_liTodoCard.classList.add("low-priority");
+			break;
+		case "Medium":
+			_liTodoCard.classList.add("medium-priority");
+			break;
+		case "High":
+			_liTodoCard.classList.add("high-priority");
+			break;
+		case "Highest":
+			_liTodoCard.classList.add("highest-priority");
+			break;
+	}
 	const _divTodoHeader = document.createElement("div");
 	_divTodoHeader.classList.add("todo-header");
 	const _inputCheckbox = createElementWithId("input", `check-${index}`);
