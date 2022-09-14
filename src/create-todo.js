@@ -54,6 +54,18 @@ const CreateTodo = (title, description, dueDate, priority) => {
         get priority() {
             return _priority;
         },
+        set title(newTitle) {
+            _title = newTitle;
+        },
+        set description(newDescription) {
+            _description = newDescription;
+        },
+        set dueDate(newDueDate) {
+            _dueDate = newDueDate;
+        },
+        set priority(newPriority) {
+            _priority = newPriority;
+        },
     };
 };
 

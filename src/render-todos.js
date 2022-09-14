@@ -82,71 +82,7 @@ const todoListDOMHandler = (() => {
 		_divTodoList = createElementWithId("div", "todoList");
 		// Append button that reveals a form to create todo item
 		_btnAddTodo = createElementWithId("button", "addTodoBtn", "Add Todo");
-		_addTodoForm = document.createElement("form");
-		_addTodoForm.setAttribute("action", "#");
-		_addTodoForm.setAttribute("style", "display: none");
-		_addTodoForm.id = "addTodoForm";
-		const _titleFormProperty = createFormProperty(
-			"Title",
-			"input",
-			"text",
-			"titleName",
-			"title_name",
-			"Todo Title"
-		);
-		_titleFormProperty.children[1].setAttribute("maxlength", "21");
-		_titleFormProperty.children[1].setAttribute("required", "");
-		const _dueDateFormProperty = createFormProperty(
-			"Due Date",
-			"input",
-			"date",
-			"dueDate",
-			"due_date"
-		);
-		const _todaysDate = format(new Date(), "yyyy-MM-dd");
-		_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
-		_dueDateFormProperty.children[1].setAttribute("value", _todaysDate);
-		const _priorityFormProperty = createFormProperty(
-			"Priority",
-			"select",
-			"",
-			"priority",
-			"priority"
-		);
-		const _optHighest = document.createElement("option");
-		_optHighest.setAttribute("value", "Highest");
-		_optHighest.textContent = "Highest";
-		const _optHigh = document.createElement("option");
-		_optHigh.setAttribute("value", "High");
-		_optHigh.textContent = "High";
-		const _optMedium = document.createElement("option");
-		_optMedium.setAttribute("value", "Medium");
-		_optMedium.setAttribute("selected", "");
-		_optMedium.textContent = "Medium";
-		const _optLow = document.createElement("option");
-		_optLow.setAttribute("value", "Low");
-		_optLow.textContent = "Low";
-		_priorityFormProperty.children[1].append(
-			_optHighest,
-			_optHigh,
-			_optMedium,
-			_optLow
-		);
-		_addTodoForm.append(
-			createFormCloseButton("closeTodoFormBtn"),
-			_titleFormProperty,
-			createFormProperty(
-				"Description",
-				"input",
-				"text",
-				"description",
-				"desc_text",
-				"Todo Description"
-			),
-			_dueDateFormProperty,
-			_priorityFormProperty,
-			createFormSubmitButton("todoFormSubmitBtn")
-		);
+		_addTodoForm = createTodoForm("addTodoForm", "closeTodoFormBtn", "todoFormSubmitBtn");
 		_divContent.append(
 			_btnBackToProjects,
 			_h1ProjectTitle,
@@ -235,6 +171,78 @@ export function createFormProperty(
 	return _divFormRow;
 }
 
+function createTodoForm(formId, closeFormId, submitFormId) {
+	const _todoForm = document.createElement("form");
+	_todoForm.setAttribute("action", "#");
+	_todoForm.setAttribute("style", "display: none");
+	_todoForm.id = formId;
+	_todoForm.classList.add("todo-form");
+	const _titleFormProperty = createFormProperty(
+		"Title",
+		"input",
+		"text",
+		"titleName",
+		"title_name",
+		"Todo Title"
+	);
+	_titleFormProperty.children[1].setAttribute("maxlength", "21");
+	_titleFormProperty.children[1].setAttribute("required", "");
+	const _dueDateFormProperty = createFormProperty(
+		"Due Date",
+		"input",
+		"date",
+		"dueDate",
+		"due_date"
+	);
+	const _todaysDate = format(new Date(), "yyyy-MM-dd");
+	_dueDateFormProperty.children[1].setAttribute("min", _todaysDate);
+	_dueDateFormProperty.children[1].setAttribute("value", _todaysDate);
+	const _priorityFormProperty = createFormProperty(
+		"Priority",
+		"select",
+		"",
+		"priority",
+		"priority"
+	);
+	const _optHighest = document.createElement("option");
+	_optHighest.setAttribute("value", "Highest");
+	_optHighest.textContent = "Highest";
+	const _optHigh = document.createElement("option");
+	_optHigh.setAttribute("value", "High");
+	_optHigh.textContent = "High";
+	const _optMedium = document.createElement("option");
+	_optMedium.setAttribute("value", "Medium");
+	_optMedium.setAttribute("selected", "");
+	_optMedium.textContent = "Medium";
+	const _optLow = document.createElement("option");
+	_optLow.setAttribute("value", "Low");
+	_optLow.textContent = "Low";
+	_priorityFormProperty.children[1].append(
+		_optHighest,
+		_optHigh,
+		_optMedium,
+		_optLow
+	);
+	_todoForm.append(
+		createFormCloseButton(closeFormId),
+		_titleFormProperty,
+		createFormProperty(
+			"Description",
+			"input",
+			"text",
+			"description",
+			"desc_text",
+			"Todo Description"
+		),
+		_dueDateFormProperty,
+		_priorityFormProperty,
+		createFormSubmitButton(submitFormId)
+	);
+
+
+	return _todoForm;
+}
+
 export function createFormSubmitButton(id) {
 	if (typeof id !== "string") {
 		throw "createFormSubmitButton must be called with strings";
@@ -305,7 +313,6 @@ function createTodoCardDOMElement(todo, index) {
 	_imgExpandDetailsBtn.setAttribute("src", ExpandIcon);
 	_imgExpandDetailsBtn.classList.add("expand-details-btn");
 	_imgExpandDetailsBtn.setAttribute("data-index", index);
-
 	const _btnDeleteTodo = document.createElement("button");
 	_btnDeleteTodo.classList.add("todo-del-btn");
 	_btnDeleteTodo.id = "deleteTodoBtn";
@@ -329,13 +336,35 @@ function createTodoCardDOMElement(todo, index) {
 	_pTodoPriority.textContent = "Priority: " + todo.priority;
 	_pTodoPriority.classList.add("todo-priority");
 	const _br = document.createElement("br");
+	const _editTodoBtn = createElementWithId("button", "editTodoBtn", "Edit");
+	_editTodoBtn.classList.add("edit-todo-btn");
 	_divTodoDetails.append(
 		_pTodoPriority,
 		_pTodoDescriptionLabel,
 		_br,
-		_pTodoDescription
+		_pTodoDescription,
+		_editTodoBtn
 	);
-	_liTodoCard.append(_divTodoHeader, _divTodoDetails);
+
+	// Set the default value of the inputs to the current values of the todo item
+	const _editTodoForm = createTodoForm("editTodoForm", "closeEditTodoFormBtn", "submitEditTodoFormBtn");
+	_editTodoForm.setAttribute("data-index", index);
+	const _titleInput = _editTodoForm.children[1].children[1];
+	const _descriptionInput = _editTodoForm.children[2].children[1];
+	const _dueDateInput = _editTodoForm.children[3].children[1];
+	const _priorityInput = _editTodoForm.children[4].children[1];
+	_titleInput.setAttribute("value", todo.title);
+	_descriptionInput.setAttribute("value", todo.description === "No description" ? "" : todo.description);
+	_dueDateInput.setAttribute("value", format(todo.dueDate, "yyyy-MM-dd"));
+
+	for (var i = 0; i < _priorityInput.children.length; i++) {
+		_priorityInput.children[i].removeAttribute("selected");
+		if (_priorityInput.children[i].value === todo.priority) {
+			_priorityInput.children[i].setAttribute("selected", "");
+		}
+	}
+
+	_liTodoCard.append(_divTodoHeader, _divTodoDetails, _editTodoForm);
 	return _liTodoCard;
 }
 

@@ -139,6 +139,13 @@ div#todoList ul li button.todo-del-btn {
 
 div#todoList ul li div.todo-details {
 	padding: 5px 25px 20px 25px;
+	position: relative;
+}
+
+div#todoList ul li div.todo-details button.edit-todo-btn {
+	position: absolute;
+	top: 4px;
+	right: 45px;
 }
 
 div#todoList ul li h4.todo-priority {
@@ -146,21 +153,30 @@ div#todoList ul li h4.todo-priority {
 }
 
 form#addTodoForm,
-form#addProjectForm {
-	background-color: #f6f7f8;
-	border: 1px solid #d6d9dc;
-	border-radius: 3px;
-
-	padding: 50px 50px 30px 30px;
-	margin: 0 0 20px 0;
+form#addProjectForm,
+form.todo-form {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	position: relative;
 }
 
+form.todo-form {
+	padding: 40px 20px 10px 40px;
+}
+
+form#addTodoForm,
+form#addProjectForm {
+	padding: 50px 50px 30px 30px;
+	margin: 0 0 20px 0;
+	background-color: #f6f7f8;
+	border: 1px solid #d6d9dc;
+	border-radius: 3px;
+}
+
 form#addTodoForm button#closeTodoFormBtn,
-form#addProjectForm button#closeProjectFormBtn {
+form#addProjectForm button#closeProjectFormBtn,
+form.todo-form button#closeEditTodoFormBtn {
 	position: absolute;
 	top: 5px;
 	right: 5px;
