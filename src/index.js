@@ -11,11 +11,51 @@ import projectsDOMHandler from "./render-projects.js";
 import { isDate, format } from "date-fns";
 
 const mainAppLogic = (() => {
-	const _projects = [];
+	var _projects = [];
 	const _firstProject = CreateProject("My First Todo List", []);
-	_projects.push(_firstProject);
-	todoListDOMHandler.renderTodoListPage(_firstProject);
 	const _divContent = document.querySelector("div#content");
+	const updateLocalStorage = () => {
+		localStorage.setItem("projects", JSON.stringify(_projects));
+	};
+	if (storageAvailable("localStorage")) {
+		// Setup all necessary variables
+		if (!localStorage.getItem("projects")) {
+			_projects.push(_firstProject);
+			updateLocalStorage();
+			todoListDOMHandler.renderTodoListPage(_firstProject);
+		} else {
+			const _parsedProjects = JSON.parse(
+				localStorage.getItem("projects")
+			);
+			for (var i = 0; i < _parsedProjects.length; i++) {
+				const _currProjectObj = CreateProject(
+					_parsedProjects[i].title,
+					[]
+				);
+				const _currParsedTodoList = _parsedProjects[i].listOfTodos;
+				for (
+					var j = 0;
+					j < _currParsedTodoList.length;
+					j++
+				) {
+					const _currTodoObj = CreateTodo(
+						_currParsedTodoList[j].title,
+						_currParsedTodoList[j].description,
+						new Date(_currParsedTodoList[j].dueDate),
+						_currParsedTodoList[j].priority
+					);
+					_currProjectObj.addTodo(_currTodoObj);
+				}
+				_projects.push(_currProjectObj);
+			}
+			todoListDOMHandler.renderTodoListPage(_projects[0]);
+			projectsDOMHandler.renderProjectsPage(_projects);
+		}
+	} else {
+		_projects.push(_firstProject);
+		updateLocalStorage();
+		todoListDOMHandler.renderTodoListPage(_firstProject);
+	}
 
 	const _preventDefaultSubmission = (e) => {
 		e.preventDefault();
@@ -50,6 +90,9 @@ const mainAppLogic = (() => {
 				);
 				todoListDOMHandler.currProject.title =
 					formData.get("project_title");
+
+				updateLocalStorage();
+
 				todoListDOMHandler.renderTodoListPage(
 					todoListDOMHandler.currProject
 				);
@@ -82,6 +125,7 @@ const mainAppLogic = (() => {
 				projectsDOMHandler.renderProjectsPage(_projects);
 				break;
 			case "todoFormSubmitBtn":
+				2;
 				if (!todoListDOMHandler.addTodoForm.checkValidity()) {
 					const _dueDateInput =
 						todoListDOMHandler.addTodoForm.children[3].children[1];
@@ -105,6 +149,7 @@ const mainAppLogic = (() => {
 				);
 				formData = new FormData(todoListDOMHandler.addTodoForm);
 				addTodoToProject(formData);
+				updateLocalStorage();
 				todoListDOMHandler.reloadTodoListDisplay();
 				disableForm(
 					todoListDOMHandler.addTodoForm,
@@ -124,6 +169,7 @@ const mainAppLogic = (() => {
 				formData = new FormData(projectsDOMHandler.form);
 				const _newProject = CreateProject(formData.get("title_name"));
 				_projects.push(_newProject);
+				updateLocalStorage();
 				projectsDOMHandler.reloadProjectListDisplay();
 				disableForm(
 					projectsDOMHandler.form,
@@ -140,6 +186,7 @@ const mainAppLogic = (() => {
 				todoListDOMHandler.currProject.removeTodo(
 					Number(e.target.dataset.index)
 				);
+				updateLocalStorage();
 				todoListDOMHandler.reloadTodoListDisplay();
 				break;
 			case "openProject":
@@ -176,7 +223,9 @@ const mainAppLogic = (() => {
 
 				for (var i = 0; i < _priorityInput.children.length; i++) {
 					_priorityInput.children[i].removeAttribute("selected");
-					if (_priorityInput.children[i].value === currTodo.priority) {
+					if (
+						_priorityInput.children[i].value === currTodo.priority
+					) {
 						_priorityInput.children[i].setAttribute("selected", "");
 					}
 				}
@@ -199,8 +248,7 @@ const mainAppLogic = (() => {
 				currTodoForm = liCurrTodo.children[2];
 				currTodoEditBtn = currTodoDetails.children[4];
 				if (!currTodoForm.checkValidity()) {
-					const _dueDateInput =
-						currTodoForm.children[3].children[1];
+					const _dueDateInput = currTodoForm.children[3].children[1];
 					const _inputDate = _dueDateInput.valueAsDate;
 					if (!isDate(_inputDate)) {
 						_dueDateInput.setCustomValidity(
@@ -229,6 +277,7 @@ const mainAppLogic = (() => {
 					formData.get("due_date").replace(/\-/g, "/")
 				);
 				currTodo.priority = formData.get("priority");
+				updateLocalStorage();
 				currTodoHeader.children[1].textContent =
 					formData.get("title_name");
 				currTodoHeader.children[2].textContent = `Due: ${format(
@@ -274,4 +323,31 @@ function addTodoToProject(formData) {
 		formData.get("priority")
 	);
 	todoListDOMHandler.currProject.addTodo(_newTodo);
+}
+
+function storageAvailable(type) {
+	let storage;
+	try {
+		storage = window[type];
+		const x = "__storage_test__";
+		storage.setItem(x, x);
+		storage.removeItem(x);
+		return true;
+	} catch (e) {
+		return (
+			e instanceof DOMException &&
+			// everything except Firefox
+			(e.status === 22 ||
+				// Firefox
+				e.status === 1014 ||
+				// test name field too, because code might not be present
+				// everything except Firefox
+				e.name === "QuotaExceededError" ||
+				// Firefox
+				e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+			// acknowledge QuotaExceededError only if there's something already stored
+			storage &&
+			storage.length !== 0
+		);
+	}
 }
