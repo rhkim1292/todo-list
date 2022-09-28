@@ -1,72 +1,83 @@
-import {isDate, isBefore, startOfToday} from "date-fns";
+import { isDate, isBefore, startOfToday } from 'date-fns';
 
-const CreateTodo = (title, description, dueDate, priority) => {
-    const _isValidTitle = (title) => {
-        if (typeof title !== "string" || title.length <= 0) return false;
-        return true;
+const CreateTodo = (t, desc, due, p) => {
+  const isValidTitle = (titleToCheck) => {
+    if (typeof titleToCheck !== 'string' || titleToCheck.length <= 0) {
+      return false;
     }
+    return true;
+  };
 
-    const _isValidDescription = (description) => {
-        if (typeof description !== "string") return false;
-        return true;
-    }
+  const isValidDescription = (description) => {
+    if (typeof description !== 'string') return false;
+    return true;
+  };
 
-    const _isValidDueDate = (dueDate) => {
-        if (!isDate(dueDate) || isBefore(dueDate, startOfToday())) return false;
-        return true;
-    }
+  const isValidDueDate = (dueDate) => {
+    if (!isDate(dueDate) || isBefore(dueDate, startOfToday())) return false;
+    return true;
+  };
 
-    const _isValidPriority = (priority) => {
-        if (priority !== "Highest" && priority !== "High" && priority !== "Medium" && priority !== "Low") return false;
-        return true;
+  const isValidPriority = (priority) => {
+    if (
+      priority !== 'Highest'
+      && priority !== 'High'
+      && priority !== 'Medium'
+      && priority !== 'Low'
+    ) {
+      return false;
     }
+    return true;
+  };
 
-    if (!_isValidTitle(title)) {
-        throw "Please enter a valid string input for the todo title!";
-    }
-    if (!_isValidDescription(description)) {
-        throw "Please enter a valid string input for the todo description!";
-    }
+  if (!isValidTitle(t)) {
+    throw new Error('Please enter a valid string input for the todo title!');
+  }
+  if (!isValidDescription(desc)) {
+    throw new Error(
+      'Please enter a valid string input for the todo description!',
+    );
+  }
 
-    if (!_isValidDueDate(dueDate)) {
-        throw "Please enter a valid date in the future!";
-    }
-    
-    if (!_isValidPriority(priority)) {
-        throw "Please enter a valid priority!";
-    }
+  if (!isValidDueDate(due)) {
+    throw new Error('Please enter a valid date in the future!');
+  }
 
-    var _title = title;
-    var _description = description === "" ? "No description" : description;
-    var _dueDate = dueDate;
-    var _priority = priority;
+  if (!isValidPriority(p)) {
+    throw new Error('Please enter a valid priority!');
+  }
 
-    return {
-        get title() {
-            return _title;
-        },
-        get description() {
-            return _description;
-        },
-        get dueDate() {
-            return _dueDate;
-        },
-        get priority() {
-            return _priority;
-        },
-        set title(newTitle) {
-            _title = newTitle;
-        },
-        set description(newDescription) {
-            _description = newDescription;
-        },
-        set dueDate(newDueDate) {
-            _dueDate = newDueDate;
-        },
-        set priority(newPriority) {
-            _priority = newPriority;
-        },
-    };
+  let title = t;
+  let description = desc === '' ? 'No description' : desc;
+  let dueDate = due;
+  let priority = p;
+
+  return {
+    get title() {
+      return title;
+    },
+    set title(newTitle) {
+      title = newTitle;
+    },
+    get description() {
+      return description;
+    },
+    set description(newDescription) {
+      description = newDescription;
+    },
+    get dueDate() {
+      return dueDate;
+    },
+    set dueDate(newDueDate) {
+      dueDate = newDueDate;
+    },
+    get priority() {
+      return priority;
+    },
+    set priority(newPriority) {
+      priority = newPriority;
+    },
+  };
 };
 
 export default CreateTodo;

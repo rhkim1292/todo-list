@@ -1,51 +1,51 @@
-const CreateProject = (title, listOfTodos = []) => {
-	if (!Array.isArray(listOfTodos)) {
-		throw "Project must be created with a passed-in array";
-	}
+const CreateProject = (t, todoList = []) => {
+  if (!Array.isArray(todoList)) {
+    throw new Error('Project must be created with a passed-in array');
+  }
 
-	const _isValidTitle = (title) => {
-		if (typeof title !== "string" || title.length <= 0) return false;
-		return true;
-	};
+  const isValidTitle = (titleToCheck) => {
+    if (typeof titleToCheck !== 'string' || titleToCheck.length <= 0) return false;
+    return true;
+  };
 
-	if (!_isValidTitle(title)) {
-		throw "Please enter a valid string input for the project title";
-	}
+  if (!isValidTitle(t)) {
+    throw new Error('Please enter a valid string input for the project title');
+  }
 
-	var _title = title;
-	var _listOfTodos = listOfTodos;
+  let title = t;
+  let listOfTodos = todoList;
 
-	const addTodo = (todo) => {
-		_listOfTodos.push(todo);
-	};
+  const addTodo = (todo) => {
+    listOfTodos.push(todo);
+  };
 
-	const removeTodo = (index) => {
-		_listOfTodos.splice(index, 1);
-	}
+  const removeTodo = (index) => {
+    listOfTodos.splice(index, 1);
+  };
 
-	return {
-		get title() {
-			return _title;
-		},
-		get length() {
-			return _listOfTodos.length;
-		},
-		get listOfTodos() {
-			return _listOfTodos;
-		},
-		set listOfTodos(todoList) {
-			if (!Array.isArray(todoList)) {
-				throw "Setting type must be an array";
-			}
+  return {
+    get title() {
+      return title;
+    },
+    set title(newTitle) {
+      title = newTitle;
+    },
+    get length() {
+      return listOfTodos.length;
+    },
+    get listOfTodos() {
+      return listOfTodos;
+    },
+    set listOfTodos(newTodoList) {
+      if (!Array.isArray(newTodoList)) {
+        throw new Error('Setting type must be an array');
+      }
 
-			_listOfTodos = todoList;
-		},
-		set title(newTitle) {
-			_title = newTitle;
-		},
-		addTodo,
-		removeTodo,
-	};
+      listOfTodos = newTodoList;
+    },
+    addTodo,
+    removeTodo,
+  };
 };
 
 export default CreateProject;
