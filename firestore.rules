@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Projects:
+    //   - Anyone can read.
+    //   - Authenticated users can add and edit projects.
+    //   - Deletes are not allowed.
+    match /projects/projects{
+      allow read;
+      allow create, update;
+      allow delete;
+    }
+  }
+}
